@@ -1,0 +1,39 @@
+- hosts: ci
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Creation du dossier repos
+      file:
+        path: /home/vagrant/repos
+        state: directory
+
+    - name: Installer git
+      yum: 
+        name: git 
+        state: present
+
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/paola1227/student-list
+        dest: /home/vagrant/repos/
+        clone: yes
+        update: yes
+
+    - name: Log into DockerHub
+      docker_login:
+        username: paola1227
+        password: lamica2021
+
+    - name: builder, taguer et pusher l'image sur docker hub
+      docker_image:
+        build:
+          path: /home/vagrant/repos/simple_api
+        name: student-age:v1
+        repository: paola1227/student-age:v1
+        push: yes
+        source: build
+
+    - name: Log out of DockerHub
+      docker_login:
+        state: absent   
+

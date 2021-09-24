@@ -1,0 +1,29 @@
+- hosts: cd
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Creation du dossier repos
+      file:
+        path: /home/vagrant/repos
+        state: directory
+
+    - name: Installer git
+      package:
+        name: git
+        state: present
+
+    - name: Clone a github repository
+      git:
+        repo: https://github.com/paola1227/student-list
+        dest: /home/vagrant/repos/
+        clone: yes
+        update: yes
+
+    - name: Create a Deployment by reading the definition from a local file
+      #k8s:
+       # state: present
+        #kubeconfig: /home/vagrant/.kube/config
+        #context: minikube
+        #src: /home/vagrant/repos/manifest.yaml
+      command: kubectl --kubeconfig /home/vagrant/.kube/config apply -f  /home/vagrant/repos/manifest.yaml
+
