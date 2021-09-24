@@ -21,15 +21,15 @@
 
     - name: Log into DockerHub
       docker_login:
-        username: paola1227
-        password: lamica2021
+        username: user-name_dockerhub
+        password: password_dockerhub
 
     - name: builder, taguer et pusher l'image sur docker hub
       docker_image:
         build:
           path: /home/vagrant/repos/simple_api
         name: student-age:v1
-        repository: paola1227/student-age:v1
+        repository: user_name_dockerhub/student-age:v1
         push: yes
         source: build
 
